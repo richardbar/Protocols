@@ -24,6 +24,11 @@
 
 #include "Protocols/I2c/I2cBus.hpp"
 
+#include <cstddef>
+#include <cstdint>
+#include <stdexcept>
+#include <optional>
+
 using Protocols::I2c::I2cBus;
 
 I2cBus::I2cBus(const I2cBus &obj)

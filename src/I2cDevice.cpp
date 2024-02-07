@@ -24,6 +24,13 @@
 
 #include "Protocols/I2c/I2cDevice.hpp"
 
+#include <cstddef>
+#include <cstdint>
+#include <optional>
+
+#include <Protocols/I2c/I2cBus.hpp>
+#include <Protocols/I2c/I2cConnectionSettings.hpp>
+
 using Protocols::I2c::I2cBus;
 using Protocols::I2c::I2cDevice;
 
