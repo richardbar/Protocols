@@ -32,9 +32,10 @@
 #include <Protocols/I2c/I2cConnectionSettings.hpp>
 
 using Protocols::I2c::I2cBus;
+using Protocols::I2c::I2cConnectionSettings;
 using Protocols::I2c::I2cDevice;
 
-I2cDevice::I2cDevice(const I2cBus &bus, int deviceAddress) : bus(bus), deviceAddress(deviceAddress) {}
+I2cDevice::I2cDevice(const I2cBus &bus, int deviceAddress) : bus(std::move(bus)), deviceAddress(deviceAddress) {}
 
 I2cDevice::I2cDevice(const I2cDevice &obj) : bus(obj.bus), deviceAddress(obj.deviceAddress) {}
 
@@ -43,24 +44,18 @@ I2cDevice::I2cDevice(I2cDevice &&deadObj) noexcept : bus(std::move(deadObj.bus))
     deadObj.deviceAddress = -1;
 }
 
-std::optional<I2cDevice> I2cDevice::TryCreate(const I2cBus &bus, int deviceAddress) noexcept
+std::optional<I2cDevice> I2cDevice::TryCreate(const I2cConnectionSettings &i2cConnectionSettings) noexcept
 {
-    const bool invalidDeviceAddress = (deviceAddress < 0);
-    if (invalidDeviceAddress)
+    const auto &bus = I2cBus::TryCreate(i2cConnectionSettings.GetBusNumber());
+    const bool busCreationFailed = !bus;
+    if (busCreationFailed)
     {
         return std::nullopt;
     }
 
-    try
-    {
-        const auto &device = I2cDevice(bus, deviceAddress);
+    const auto &device = I2cDevice(bus.value(), i2cConnectionSettings.GetDeviceAddress());
 
-        return device;
-    }
-    catch (const std::exception &)
-    {
-        return std::nullopt;
-    }
+    return device;
 }
 
 bool I2cDevice::WriteRead(const std::uint8_t *writeBuffer, const std::size_t writeBufferSize,

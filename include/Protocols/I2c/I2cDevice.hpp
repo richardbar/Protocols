@@ -31,6 +31,7 @@
 #include <optional>
 
 #include <Protocols/I2c/I2cBus.hpp>
+#include <Protocols/I2c/I2cConnectionSettings.hpp>
 
 namespace Protocols
 {
@@ -49,7 +50,7 @@ namespace Protocols
             I2cDevice(const I2cDevice &obj);
             I2cDevice(I2cDevice &&deadObj) noexcept;
 
-            static std::optional<I2cDevice> TryCreate(const I2cBus &bus, int deviceAddress) noexcept;
+            static std::optional<I2cDevice> TryCreate(const I2cConnectionSettings &i2cConnectionSettings) noexcept;
 
             bool WriteRead(const std::uint8_t *writeBuffer, const std::size_t writeBufferSize,
                            std::uint8_t *readBuffer, const std::size_t readBufferSize) const noexcept;
