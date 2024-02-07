@@ -43,13 +43,6 @@ namespace Protocols
             explicit I2cBus(const int fd);
 #endif
 
-        public:
-            I2cBus() = delete;
-            I2cBus(const I2cBus &obj);
-            I2cBus(I2cBus &&deadObj) noexcept;
-
-            static std::optional<I2cBus> TryCreate(int busNumber) noexcept;
-
             bool WriteRead(const int deviceAddress, const std::uint8_t *writeBuffer, const std::size_t writeBufferSize,
                            std::uint8_t *readBuffer, const std::size_t readBufferSize) const noexcept;
 
@@ -125,10 +118,21 @@ namespace Protocols
             }
 #endif
 
+        public:
+            I2cBus() = delete;
+            I2cBus(const I2cBus &obj);
+            I2cBus(I2cBus &&deadObj) noexcept;
+
+            static std::optional<I2cBus> TryCreate(int busNumber) noexcept;
+
             I2cBus &operator=(const I2cBus &obj);
             I2cBus &operator=(I2cBus &&deadObj) noexcept;
 
             ~I2cBus();
+
+#if defined(__PROTOCOLS__I2C__I2C_DEVICE__H__)
+            friend class I2cDevice;
+#endif /*__PROTOCOLS__I2C__I2C_DEVICE__H__*/
         };
     } // namespace I2c
 } // namespace Protocols
