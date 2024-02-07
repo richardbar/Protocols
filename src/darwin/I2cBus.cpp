@@ -26,6 +26,16 @@
 
 using Protocols::I2c::I2cBus;
 
+I2cBus::I2cBus(const I2cBus &obj)
+{
+    throw std::runtime_error("Unsupported operation");
+}
+
+I2cBus::I2cBus(I2cBus &&deadObj) noexcept
+{
+    return;
+}
+
 std::optional<I2cBus> I2cBus::TryCreate(int busNumber) noexcept
 {
     return std::nullopt;
@@ -36,6 +46,16 @@ bool I2cBus::WriteRead(const int deviceAddress,
                        std::uint8_t *readBuffer, const std::size_t readBufferSize) const noexcept
 {
     return false;
+}
+
+I2cBus &I2cBus::operator=(const I2cBus &obj)
+{
+    throw std::runtime_error("Unsupported operation");
+}
+
+I2cBus &I2cBus::operator=(I2cBus &&deadObj) noexcept
+{
+    return *this;
 }
 
 I2cBus::~I2cBus() {}
